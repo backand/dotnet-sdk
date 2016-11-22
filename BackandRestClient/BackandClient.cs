@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,20 +14,41 @@ namespace BackandRestClient
     {
         const string BACKAND_URL = "https://api.backand.com/";
 
-        RestClient client;
-        public BackandClient(string appName, string username, string password)
+        RestClient client = null;
+        public BackandClient(string accessToken = null, string anonymousToken = null)
         {
-            client = GetAuthentificatedClient(appName, username, password);
+            if (accessToken != null)
+            {
+                client = GetRestClient();
+                SetAccessToken(accessToken);
+            }
+            else if (anonymousToken != null)
+            {
+                client = GetRestClient();
+                SetAnonymousToken(anonymousToken);
+            }
+        }
+
+        public BackandClient(LoginResult loginResult)
+            : this(loginResult.token_type + " " + loginResult.access_token)
+        {
         }
 
         private RestClient GetRestClient()
         {
-            RestClient client = new RestClient(BACKAND_URL);
-
-            return client;
+            return new RestClient(BACKAND_URL);
         }
 
-        private LoginResult SignIn(string username, string password, string appName)
+        private void SetAccessToken(string accessToken)
+        {
+            client.AddDefaultHeader("Authorization", accessToken);
+        }
+        private void SetAnonymousToken(string anonymousToken)
+        {
+            client.AddDefaultHeader("AnonymousToken", anonymousToken);
+        }
+
+        private LoginResult SignInInner(string username, string password, string appName)
         {
             var request = new RestRequest("token", Method.POST);
             request.AddParameter("username", username);
@@ -37,22 +59,28 @@ namespace BackandRestClient
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
             request.AddHeader("Accept", "application/json");
 
-            var response = GetRestClient().Execute<LoginResult>(request).Data;
-            return response;
+            var response = GetRestClient().Execute<LoginResult>(request);
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            { 
+                return response.Data; 
+            }
+            else
+            {
+                throw new BeckandClientException(response);
+            }
         }
 
-       
-        private RestClient GetAuthentificatedClient(string appName, string username, string password)
+
+        public LoginResult SignIn(string appName, string username, string password)
         {
-            var rest = GetRestClient();
+            client = GetRestClient();
 
-            var res = SignIn(username, password, appName);
-            rest.AddDefaultHeader("Authorization", res.token_type + " " + res.access_token);
-            Console.WriteLine(res.access_token);
-            return rest;
+            var res = SignInInner(username, password, appName);
+            SetAccessToken(res.token_type + " " + res.access_token);
+            return res;
         }
 
-        public IRestResponse GelAll(string name, bool? withSelectOptions = null, bool? withFilterOptions = null, int? pageNumber = null, int? pageSize = null, object filter = null, object sort = null, string search = null, bool? deep = null, bool? descriptive = true, bool? relatedObjects = false)
+        public List<T> GelList<T>(string name, out int? totalRows, bool? withSelectOptions = null, bool? withFilterOptions = null, int? pageNumber = null, int? pageSize = null, object filter = null, object sort = null, string search = null, bool? deep = null, bool? descriptive = true, bool? relatedObjects = false) where T : new()
         {
             var request = new RestRequest("/1/objects/{name}", Method.GET);
             request.AddUrlSegment("name", name);
@@ -77,12 +105,21 @@ namespace BackandRestClient
             if (relatedObjects.HasValue)
                 request.AddParameter("relatedObjects", relatedObjects.Value, ParameterType.QueryString);
 
-            var response = client.Execute(request);
-            
-            return response;
+            var response = client.Execute<GelListResult<T>>(request);
+
+            totalRows = response.Data.totalRows;
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return response.Data.data;
+            }
+            else
+            {
+                throw new BeckandClientException(response);
+            }
         }
 
-        public IRestResponse GetOne(string name, string id, bool? deep = null, int? level = null)
+        public T GetOne<T>(string name, string id, bool? deep = null, int? level = null) where T : new()
         {
             var request = new RestRequest("/1/objects/{name}/{id}", Method.GET);
             request.AddUrlSegment("name", name);
@@ -92,11 +129,18 @@ namespace BackandRestClient
             if (level.HasValue)
                 request.AddParameter("level", level.Value, ParameterType.QueryString);
 
-            var response = client.Execute(request);
-            return response;
+            var response = client.Execute<T>(request);
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return response.Data;
+            }
+            else
+            {
+                throw new BeckandClientException(response);
+            }
         }
 
-        public IRestResponse Post<T>(string name, T data, bool? deep = null, bool? returnObject = null, string parameters = null)
+        public T Post<T>(string name, T data, out string id, bool? deep = null, bool? returnObject = null, string parameters = null) where T : new()
         {
             var request = new RestRequest("/1/objects/{name}", Method.POST);
             request.AddUrlSegment("name", name);
@@ -109,12 +153,32 @@ namespace BackandRestClient
             if (parameters != null)
                 request.AddParameter("parameters", parameters, ParameterType.QueryString);
 
-            var response = client.Execute(request);
-            
-            return response;
+            var response = client.Execute<T>(request);
+
+            id = null;
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                var result = JsonConvert.DeserializeObject<Dictionary<string, object>>(response.Content);
+                if (result.ContainsKey("__metadata"))
+                {
+                    Newtonsoft.Json.Linq.JToken metadata = (Newtonsoft.Json.Linq.JToken)result["__metadata"];
+                    id = metadata["id"].ToString();
+                    
+                }
+                if (returnObject.HasValue && returnObject.Value)
+                {
+                    return response.Data;
+                }
+                return default(T);
+            }
+            else
+            {
+                throw new BeckandClientException(response);
+            }
         }
 
-        public IRestResponse Put(string name, string id, object data, bool? deep = null, bool? returnObject = null, string parameters = null, bool? overwrite = null)
+        public T Put<T>(string name, string id, object data, bool? deep = null, bool? returnObject = null, string parameters = null, bool? overwrite = null) where T : new()
         {
             var request = new RestRequest("/1/objects/{name}/{id}", Method.PUT);
             request.AddUrlSegment("name", name);
@@ -130,13 +194,18 @@ namespace BackandRestClient
             if (overwrite.HasValue)
                 request.AddParameter("overwrite", overwrite.Value, ParameterType.QueryString);
 
-            var response = client.Execute(request);
-
-            return response;
-
+            var response = client.Execute<T>(request);
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return response.Data;
+            }
+            else
+            {
+                throw new BeckandClientException(response);
+            }
         }
 
-        public IRestResponse Delete(string name, string id, bool? deep = null, string parameters = null)
+        public void Delete(string name, string id, bool? deep = null, string parameters = null)
         {
             var request = new RestRequest("/1/objects/{name}/{id}", Method.DELETE);
             request.AddUrlSegment("name", name);
@@ -148,7 +217,10 @@ namespace BackandRestClient
 
             var response = client.Execute(request);
 
-            return response;
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                throw new BeckandClientException(response);
+            }
         }
     }
 
@@ -162,6 +234,29 @@ namespace BackandRestClient
         public string role { get; set; }
         public string fullName { get; set; }
         public string userId { get; set; }
+    }
+
+    public class GelListResult<T>
+    {
+        public int totalRows { get; set; }
+        public List<T> data { get; set; }
+    }
+
+    public class BeckandClientException : Exception
+    {
+        public HttpStatusCode StatusCode { get; private set; }
+
+        public BeckandClientException(string message, HttpStatusCode statusCode)
+            : base(message)
+        {
+            StatusCode = statusCode;
+        }
+
+        public BeckandClientException(IRestResponse response)
+            : this(response.Content, response.StatusCode)
+        {
+            
+        }
     }
 
 }
