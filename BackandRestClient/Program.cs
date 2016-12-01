@@ -20,7 +20,7 @@ namespace BackandRestClient
             // use this for paging
             int? totalRows = null;
             // get all todo rows
-            var todoList = backandSdk.GelList<Todo>("todo", out totalRows);
+            var todoList = backandSdk.GetList<Todo>("todo", out totalRows);
             Debug.Write(JsonConvert.SerializeObject(todoList));
 
 

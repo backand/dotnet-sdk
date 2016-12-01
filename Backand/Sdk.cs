@@ -101,7 +101,7 @@ namespace Backand
         /// <param name="search">critaria to search in all textual fields</param>
         /// <param name="deep">When set to true it gets all the parent objects under a relatedObjects node</param>
         /// <returns></returns>
-        public List<T> GelList<T>(string name, out int? totalRows, int? pageNumber = null, int? pageSize = null, object filter = null, object sort = null, string search = null, bool? deep = null) where T : new()
+        public List<T> GetList<T>(string name, out int? totalRows, int? pageNumber = null, int? pageSize = null, object filter = null, object sort = null, string search = null, bool? deep = null) where T : new()
         {
             var request = new RestRequest("/1/objects/{name}", Method.GET);
             request.AddUrlSegment("name", name);
@@ -118,7 +118,7 @@ namespace Backand
             if (deep.HasValue)
                 request.AddParameter("deep", deep.Value, ParameterType.QueryString);
             
-            var response = client.Execute<GelListResult<T>>(request);
+            var response = client.Execute<GetListResult<T>>(request);
 
             totalRows = response.Data.totalRows;
 
@@ -318,7 +318,7 @@ namespace Backand
     /// Get list result
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class GelListResult<T>
+    public class GetListResult<T>
     {
         /// <summary>
         /// The total rows in the database, regerdless the page or filter. Use this for paging
