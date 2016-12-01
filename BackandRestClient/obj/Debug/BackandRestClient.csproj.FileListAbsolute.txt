@@ -1,0 +1,25 @@
+C:\Users\Dell\Documents\Visual Studio 2013\Projects\BackandRestClient\BackandRestClient\bin\Debug\BackandRestClient.exe.config
+C:\Users\Dell\Documents\Visual Studio 2013\Projects\BackandRestClient\BackandRestClient\bin\Debug\BackandRestClient.exe
+C:\Users\Dell\Documents\Visual Studio 2013\Projects\BackandRestClient\BackandRestClient\bin\Debug\BackandRestClient.pdb
+C:\Users\Dell\Documents\Visual Studio 2013\Projects\BackandRestClient\BackandRestClient\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Dell\Documents\Visual Studio 2013\Projects\BackandRestClient\BackandRestClient\bin\Debug\RestSharp.dll
+C:\Users\Dell\Documents\Visual Studio 2013\Projects\BackandRestClient\BackandRestClient\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Dell\Documents\Visual Studio 2013\Projects\BackandRestClient\BackandRestClient\bin\Debug\RestSharp.xml
+C:\Users\Dell\Documents\Visual Studio 2013\Projects\BackandRestClient\BackandRestClient\obj\Debug\BackandRestClient.csprojResolveAssemblyReference.cache
+C:\Users\Dell\Documents\Visual Studio 2013\Projects\BackandRestClient\BackandRestClient\obj\Debug\BackandRestClient.exe
+C:\Users\Dell\Documents\Visual Studio 2013\Projects\BackandRestClient\BackandRestClient\obj\Debug\BackandRestClient.pdb
+C:\Dev\Git\Net\SDK\dotnetbknd\BackandRestClient\bin\Debug\BackandRestClient.exe.config
+C:\Dev\Git\Net\SDK\dotnetbknd\BackandRestClient\obj\Debug\BackandRestClient.exe
+C:\Dev\Git\Net\SDK\dotnetbknd\BackandRestClient\obj\Debug\BackandRestClient.pdb
+C:\Dev\Git\Net\SDK\dotnetbknd\BackandRestClient\bin\Debug\BackandRestClient.exe
+C:\Dev\Git\Net\SDK\dotnetbknd\BackandRestClient\bin\Debug\BackandRestClient.pdb
+C:\Dev\Git\Net\SDK\dotnetbknd\BackandRestClient\bin\Debug\Newtonsoft.Json.dll
+C:\Dev\Git\Net\SDK\dotnetbknd\BackandRestClient\bin\Debug\RestSharp.dll
+C:\Dev\Git\Net\SDK\dotnetbknd\BackandRestClient\bin\Debug\Newtonsoft.Json.xml
+C:\Dev\Git\Net\SDK\dotnetbknd\BackandRestClient\bin\Debug\RestSharp.xml
+C:\Dev\Git\Net\SDK\dotnetbknd\BackandRestClient\bin\Debug\BackandRestClient.XML
+C:\Dev\Git\Net\SDK\dotnetbknd\BackandRestClient\bin\Debug\Backand.dll
+C:\Dev\Git\Net\SDK\dotnetbknd\BackandRestClient\bin\Debug\Backand.pdb
+C:\Dev\Git\Net\SDK\dotnetbknd\BackandRestClient\bin\Debug\Backand.xml
+C:\Dev\Git\Net\SDK\dotnetbknd\BackandRestClient\obj\Debug\BackandRestClient.csprojResolveAssemblyReference.cache
+C:\Dev\Git\Net\SDK\dotnetbknd\BackandRestClient\bin\Debug\BackandSdkExample.exe.config
