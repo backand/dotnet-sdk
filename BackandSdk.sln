@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackandRestClient", "BackandRestClient\BackandRestClient.csproj", "{DD5EE1B1-BFAD-4910-A8EF-6AAC2FDD8D31}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackandSdkExample", "BackandRestClient\BackandSdkExample.csproj", "{DD5EE1B1-BFAD-4910-A8EF-6AAC2FDD8D31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backand", "Backand\Backand.csproj", "{4F71D253-34E6-4E7E-9701-80D465F4ADDD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{DD5EE1B1-BFAD-4910-A8EF-6AAC2FDD8D31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD5EE1B1-BFAD-4910-A8EF-6AAC2FDD8D31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD5EE1B1-BFAD-4910-A8EF-6AAC2FDD8D31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F71D253-34E6-4E7E-9701-80D465F4ADDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F71D253-34E6-4E7E-9701-80D465F4ADDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F71D253-34E6-4E7E-9701-80D465F4ADDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F71D253-34E6-4E7E-9701-80D465F4ADDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

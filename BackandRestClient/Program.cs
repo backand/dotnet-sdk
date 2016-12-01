@@ -13,14 +13,14 @@ namespace BackandRestClient
         static void Main(string[] args)
         {
 
-            BackandClient client = new BackandClient();
+            Backand.Sdk backandSdk = new Backand.Sdk();
 
-            client.SignIn("backandtodoapp", "dotnet@backand.com", "qwerty1!");
+            backandSdk.SignIn("backandtodoapp", "dotnet@backand.com", "qwerty1!");
             // this is the total row of the entire table in the database, not just what that is returned in this page. 
             // use this for paging
             int? totalRows = null;
             // get all todo rows
-            var todoList = client.GelList<Todo>("todo", out totalRows);
+            var todoList = backandSdk.GelList<Todo>("todo", out totalRows);
             Debug.Write(JsonConvert.SerializeObject(todoList));
 
 
@@ -28,20 +28,20 @@ namespace BackandRestClient
             Todo todo = new Todo() { description = "Something to do", completed = false };
             bool deep = false;
             string id = null;
-            client.Post<Todo>("todo2", todo, out id, deep);
+            backandSdk.Post<Todo>("todo", todo, out id, deep);
             Debug.Write(id);
 
             // put a todo
             todo.completed = true;
             todo.description = "do something else";
-            client.Put<Todo>("todo", id, todo);
+            backandSdk.Put<Todo>("todo", id, todo);
 
             // get a todo
-            todo = client.GetOne<Todo>("todo", id);
+            todo = backandSdk.GetOne<Todo>("todo", id);
             Debug.Write(JsonConvert.SerializeObject(todo));
 
             // delete todo
-            client.Delete("todo", id);
+            backandSdk.Delete("todo", id);
             
         }
     }
